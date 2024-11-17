@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "google/api/annotations.proto";
+import "common/response.proto";
+option go_package = "blog/api/user/v1;v1";
+
+
+// The greeting service definition.
+service UserService {
+  // Sends a greeting
+  rpc Login (LoginRequest) returns (common.Response) {
+    option (google.api.http) = {
+      post: "/login",
+      body: "*"
+    };
+  }
+}
+
+// The request message containing the user's name.
+message LoginRequest {
+  string name = 1;
+  string password = 2;
+}
+
+
+message User {
+  string name = 1;
+  string password = 2;
+  string email = 3;
+  string phone = 4;
+  string address = 5;
+  string role = 6;
+  string description = 7;
+}

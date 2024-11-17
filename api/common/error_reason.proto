@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "blog/api/common;common";
+
+enum ErrorReason {
+  GREETER_UNSPECIFIED = 0;
+  USER_NOT_FOUND = 1;
+}
