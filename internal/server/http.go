@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/google/uuid"
 )
 
 // NewHTTPServer new an HTTP server.
@@ -69,4 +70,8 @@ func CustomResponseEncoder() http.EncodeResponseFunc {
 		_, err = w.Write(data)
 		return err
 	}
+}
+
+func generateTraceID() string {
+	return uuid.New().String()
 }

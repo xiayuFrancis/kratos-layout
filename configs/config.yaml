@@ -13,3 +13,11 @@ data:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
+log:
+  level: debug
+  path: /logs
+  name: server
+  max_size: 30
+  max_backups: 100
+  max_age: 14
+  compress: true
