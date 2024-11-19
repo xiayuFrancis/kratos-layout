@@ -2,6 +2,7 @@ package service
 
 import (
 	"blog/api/common"
+	"blog/internal/biz"
 	"context"
 	"github.com/go-kratos/kratos/v2/errors"
 
@@ -11,16 +12,19 @@ import (
 type UserServiceService struct {
 	pb.UnimplementedUserServiceServer
 	response *ResponseWrapper
+	user     *biz.UserUsecase
 }
 
-func NewUserServiceService(response *ResponseWrapper) *UserServiceService {
-	return &UserServiceService{response: response}
+func NewUserServiceService(response *ResponseWrapper, user *biz.UserUsecase) *UserServiceService {
+	return &UserServiceService{response: response, user: user}
 }
 
 func (s *UserServiceService) Login(ctx context.Context, req *pb.LoginRequest) (*common.Response, error) {
-	if req.Name == "admin" {
-		return s.response.Success(&pb.User{Name: "admin", Password: "123456"})
-	}
-	return s.response.Error(errors.NotFound(common.ErrorReason_USER_NOT_FOUND.String(), "")), nil
 
+	user, err := s.user.Get(ctx, req.Name)
+	if err != nil {
+		return s.response.Error(errors.NotFound(common.ErrorReason_USER_NOT_FOUND.String(), "")), nil
+	}
+
+	return s.response.Success(&user)
 }

@@ -3,28 +3,10 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: UserService API
+    description: The greeting service definition.
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
-            tags:
-                - Greeter
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
     /login:
         post:
             tags:
@@ -57,12 +39,6 @@ components:
                 data:
                     type: string
                     format: bytes
-        helloworld.v1.HelloReply:
-            type: object
-            properties:
-                message:
-                    type: string
-            description: The response message containing the greetings
         user.v1.LoginRequest:
             type: object
             properties:
@@ -72,7 +48,4 @@ components:
                     type: string
             description: The request message containing the user's name.
 tags:
-    - name: Greeter
-      description: The greeting service definition.
     - name: UserService
-      description: The greeting service definition.
