@@ -2,6 +2,7 @@ package main
 
 import (
 	logger2 "blog/pkg/logger"
+	"context"
 	"flag"
 	"os"
 
@@ -32,6 +33,8 @@ var (
 
 func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
+	Version = "v0.0.1"
+	Name = "server"
 }
 
 func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
@@ -75,6 +78,14 @@ func main() {
 		"service.version", Version,
 		"trace_id", tracing.TraceID(),
 		"span_id", tracing.SpanID(),
+		"request_id", log.Valuer(func(ctx context.Context) interface{} {
+			// 从 context 中获取 request_id
+			reqID := ctx.Value("request_id")
+			if reqID != nil {
+				return reqID
+			}
+			return ""
+		}),
 	)
 
 	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)

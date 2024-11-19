@@ -32,6 +32,7 @@ func NewLogger(c *conf.Bootstrap) *Logger {
 		msgKey: log.DefaultMessageKey,
 	}
 }
+
 func (l *Logger) Log(level log.Level, keyvals ...interface{}) error {
 	// If logging at this level is completely disabled, skip the overhead of
 	// string formatting.

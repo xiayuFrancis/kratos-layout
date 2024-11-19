@@ -9,9 +9,12 @@ import (
 	"encoding/json"
 	"github.com/go-kratos/kratos/v2/encoding"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/uuid"
+	"golang.org/x/net/context"
 )
 
 // NewHTTPServer new an HTTP server.
@@ -19,6 +22,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, user *servic
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			MiddlewareRequestID(),
 		),
 		http.ResponseEncoder(CustomResponseEncoder()),
 	}
@@ -72,6 +76,28 @@ func CustomResponseEncoder() http.EncodeResponseFunc {
 	}
 }
 
-func generateTraceID() string {
-	return uuid.New().String()
+// MiddlewareRequestID 自定义中间件，用于获取request_id
+func MiddlewareRequestID() middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
+			if tr, ok := transport.FromServerContext(ctx); ok {
+				if htr, ok := tr.(*http.Transport); ok {
+					// 获取http.Request
+					httpReq := htr.Request()
+					// 从header中获取request_id
+					requestID := httpReq.Header.Get("X-Request-ID")
+					if requestID == "" {
+						// 如果没有request_id，则生成一个新的UUID
+						requestID = uuid.New().String()
+						// 可以将生成的request_id添加到响应header中，以便客户端可以使用
+						httpReq.Header.Set("X-Request-ID", requestID)
+					}
+					// 可以将request_id存储在上下文中，以便后续处理
+					ctx = context.WithValue(ctx, "request_id", requestID)
+				}
+			}
+			// 继续执行下一个中间件或handler
+			return handler(ctx, req)
+		}
+	}
 }
