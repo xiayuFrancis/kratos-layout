@@ -25,7 +25,8 @@ func (r *ResponseWrapper) Success(data interface{}) (*common.Response, error) {
 
 // Error 错误响应
 func (r *ResponseWrapper) Error(err error) *common.Response {
-	if e, ok := err.(*errors.Error); ok {
+	var e *errors.Error
+	if errors.As(err, &e) {
 		return &common.Response{
 			Code: int32(e.Code),
 			Msg:  e.Reason,
