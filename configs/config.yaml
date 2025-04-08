@@ -1,0 +1,27 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 30s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 30s
+data:
+  database:
+    driver: mysql
+    source: sdba:sdba@tcp(172.16.0.205:3306)/test?parseTime=True&loc=Local
+  redis:
+    addr: 172.16.0.205:6391
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+logger:
+  level: info
+  format: json
+  output_paths: stdout,./logs/app.log
+  error_output_paths: stderr,./logs/error.log
+  development: false
+  rotate:
+    filename: ./logs/app.log
+    max_size: 100
+    max_age: 7
+    max_backups: 10
+    compress: true

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package api.connect.v1;
+
+import "google/api/annotations.proto";
+import "api/common/v1/common.proto";
+
+option go_package = "kratosdemo/api/connect/v1;v1";
+
+// 定义Connect服务
+service Connect {
+  // TestConnect 测试连接接口
+  rpc TestConnect (TestConnectRequest) returns (api.common.v1.Response) {
+    option (google.api.http) = {
+      get: "/v1/connect/test"
+    };
+  }
+}
+
+// TestConnect请求
+message TestConnectRequest {}
+
+// TestConnect响应数据
+message TestConnectData {
+  string message = 1;
+  bool success = 2;
+}

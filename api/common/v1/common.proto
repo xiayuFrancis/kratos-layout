@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package api.common.v1;
+
+import "google/protobuf/struct.proto";
+
+option go_package = "kratosdemo/api/common/v1;v1";
+
+// 通用响应格式
+message Response {
+  // 状态码，0 表示成功，非 0 表示错误
+  int32 code = 1;
+  
+  // 响应消息
+  string msg = 2;
+  
+  // 扩展数据，使用 JSON 对象
+  google.protobuf.Struct ext = 3;
+}
+
+// 空请求
+message Empty {}

@@ -1,0 +1,60 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "kratosdemo/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+  Logger logger = 3;
+}
+
+message Server {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+}
+
+message Data {
+  message Database {
+    string driver = 1;
+    string source = 2;
+  }
+  message Redis {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration read_timeout = 3;
+    google.protobuf.Duration write_timeout = 4;
+  }
+  Database database = 1;
+  Redis redis = 2;
+}
+
+message Logger {
+  string level = 1;           // 日志级别: debug, info, warn, error
+  string format = 2;          // 日志格式: json, console
+  string output_paths = 3;    // 日志输出路径，多个路径用逗号分隔
+  string error_output_paths = 4; // 错误日志输出路径
+  bool development = 5;       // 是否为开发模式
+  
+  message RotateConfig {
+    string filename = 1;       // 日志文件名
+    int32 max_size = 2;       // 单个日志文件最大大小，单位MB
+    int32 max_age = 3;        // 日志文件保留天数
+    int32 max_backups = 4;    // 保留的旧日志文件最大数量
+    bool compress = 5;        // 是否压缩旧日志文件
+  }
+  
+  RotateConfig rotate = 6;    // 日志轮转配置
+}
