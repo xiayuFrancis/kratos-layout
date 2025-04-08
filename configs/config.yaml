@@ -13,6 +13,11 @@ data:
     addr: 172.16.0.205:6391
     read_timeout: 0.2s
     write_timeout: 0.2s
+  kafka:
+    brokers:
+      - 172.16.0.202:8092
+    group_id: kratosdemo
+    client_id: kratosdemo-client
 logger:
   level: info
   format: json

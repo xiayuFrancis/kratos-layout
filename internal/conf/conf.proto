@@ -37,8 +37,17 @@ message Data {
     google.protobuf.Duration read_timeout = 3;
     google.protobuf.Duration write_timeout = 4;
   }
+  message Kafka {
+    repeated string brokers = 1;  // Kafka 代理地址列表
+    string group_id = 2;         // 消费者组ID
+    string client_id = 3;        // 客户端ID
+    bool enable_tls = 4;         // 是否启用TLS
+    string username = 5;         // SASL 用户名
+    string password = 6;         // SASL 密码
+  }
   Database database = 1;
   Redis redis = 2;
+  Kafka kafka = 3;
 }
 
 message Logger {
