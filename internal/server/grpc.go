@@ -3,6 +3,7 @@ package server
 import (
 	connectv1 "kratosdemo/api/connect/v1"
 	"kratosdemo/internal/conf"
+	"kratosdemo/internal/pkg/middleware"
 	"kratosdemo/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -15,6 +16,7 @@ func NewGRPCServer(c *conf.Server, connect *service.ConnectService, logger log.L
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
+			middleware.RequestID(logger),
 		),
 	}
 	if c.Grpc.Network != "" {

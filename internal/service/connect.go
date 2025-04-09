@@ -28,7 +28,8 @@ func NewConnectService(uc *biz.ConnectUsecase, logger log.Logger) *ConnectServic
 
 // TestConnect 实现TestConnect接口
 func (s *ConnectService) TestConnect(ctx context.Context, req *v1.TestConnectRequest) (*commonv1.Response, error) {
-	s.log.Info("Received TestConnect request")
+	logger := s.log.WithContext(ctx)
+	logger.Info("Received TestConnect request")
 	success, err := s.uc.TestConnect(ctx)
 	if err != nil {
 		// 创建响应数据

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"kratosdemo/internal/conf"
 	"kratosdemo/internal/pkg/logger"
@@ -79,8 +80,12 @@ func main() {
 	zapLogger := logger.NewLogger(bc.Logger)
 	// 添加公共字段
 	logger := log.With(zapLogger,
-		"trace.id", tracing.TraceID(),
-		"span.id", tracing.SpanID(),
+		//"trace.id", tracing.TraceID(),
+		//"span.id", tracing.SpanID(),
+		"requestid", log.Valuer(func(ctx context.Context) interface{} {
+			requestID, _ := ctx.Value("x-request-id").(string)
+			return requestID
+		}),
 	)
 
 	// 创建日志目录
