@@ -2,7 +2,6 @@ package server
 
 import (
 	connectv1 "kratosdemo/api/connect/v1"
-	helloworldv1 "kratosdemo/api/helloworld/v1"
 	"kratosdemo/internal/conf"
 	"kratosdemo/internal/service"
 
@@ -12,7 +11,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, connect *service.ConnectService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, connect *service.ConnectService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -28,7 +27,6 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, connect *ser
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	helloworldv1.RegisterGreeterHTTPServer(srv, greeter)
 	connectv1.RegisterConnectHTTPServer(srv, connect)
 	return srv
 }

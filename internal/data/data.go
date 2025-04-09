@@ -15,9 +15,8 @@ import (
 
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(
-	NewData, 
-	NewGreeterRepo, 
-	NewConnectRepo, 
+	NewData,
+	NewConnectRepo,
 	NewRedisClient,
 	KafkaProviderSet,
 )
