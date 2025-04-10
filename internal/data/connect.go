@@ -24,16 +24,17 @@ func NewConnectRepo(data *Data, logger log.Logger) biz.ConnectRepo {
 // TestConnect 测试数据库连接
 func (r *ConnectRepo) TestConnect(ctx context.Context) (bool, error) {
 	// 使用Ent客户端测试连接
+	logger := r.log.WithContext(ctx)
 	if r.data.db == nil {
 		return false, nil
 	}
-	
+
 	// 尝试执行一个简单的查询来测试连接
 	_, err := r.data.db.User.Query().Count(ctx)
 	if err != nil {
-		r.log.Errorf("database connection test failed: %v", err)
+		logger.Errorf("database connection test failed: %v", err)
 		return false, err
 	}
-	
+
 	return true, nil
 }

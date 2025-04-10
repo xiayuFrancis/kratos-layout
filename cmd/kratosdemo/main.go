@@ -16,6 +16,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	_ "go.uber.org/automaxprocs"
+
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
